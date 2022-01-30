@@ -25,6 +25,8 @@ defmodule Iptools do
     {"224.0.0.0", "255.255.255.255"}
   ]
 
+  @ipv6_regex "^[0-9a-f]{0,4}:[0-9a-f]{0,4}:[0-9a-f]{0,4}:[0-9a-f]{0,4}:[0-9a-f]{0,4}:[0-9a-f]{0,4}:[0-9a-f]{0,4}:[0-9a-f]{0,4}$"
+
   @doc """
   Converts a dotted-decimal notation IPv4 string to a list of integers.
   """
@@ -36,13 +38,59 @@ defmodule Iptools do
   end
 
   @doc """
-  Checks if the given string is an IPv4 address in dotted-decimal notication.
+  Checks if the given string is an IPv4 address in dotted-decimal notation.
   """
   @spec is_ipv4?(String.t) :: boolean()
   def is_ipv4?(ip) do
     case Regex.match?(~r/^(\d{1,3}\.){3}\d{1,3}$/, ip) do
       false -> false
       true -> ip |> to_list |> Enum.any?(fn(x) -> x > 255 end) |> Kernel.not
+    end
+  end
+
+  @doc """
+  Checks if the given string is an IPv6 address in dotted-decimal notication.
+
+  8 blocks of 4 hex digits.  Leadings zeroes can be omitted
+  """
+  @spec is_ipv6?(String.t) :: boolean()
+  def is_ipv6?(ip) do
+    case Regex.match?(~r/#{@ipv6_regex}/i, ip) do
+      false -> false
+      true -> true
+    end
+  end
+
+  def is_ipv6_normal(ip), do: Regex.match?(~r/#{@ipv6_regex}/i, ip)
+
+  def is_ipv6_double_dot(ip) do
+
+  end
+
+  @doc """
+  Normalizes the specified IPv6 address.  
+
+  Returns {:ok, addr} if success
+  Returns {:error, :invalid} if is not a valid IPv6 address
+  """
+  @spec normalize_ipv6(String.t) :: String.t()
+  def normalize_ipv6(ip) do
+    case is_ipv6?(ip) do
+      false -> {:error, :invalid}
+      true -> ip  # TODO
+    end
+  end
+
+  @doc """
+  Normalizes the specified IPv6 address.  Returns IP as a String
+
+  Raises if invalid IPv6
+  """
+  @spec normalize_ipv6!(String.t) :: String.t()
+  def normalize_ipv6!(ip) do
+    case normalize_ipv6(ip) do
+      {:ok, addr} -> addr
+      {:error, :invalid} -> raise "Doh"
     end
   end
 

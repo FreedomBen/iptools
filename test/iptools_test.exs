@@ -88,4 +88,36 @@ defmodule IptoolsTest do
     assert Iptools.subnet_bit_count("255.255.255.255") == 32
   end
 
+  # https://www.ibm.com/docs/en/i/7.4?topic=concepts-ipv6-address-formats
+  describe "identifies an IPv6 ip address" do
+    test "identifies an IPv6 ip address" do
+      assert Iptools.is_ipv6?("0000:0000:0000:0000:0000:0000:0000:0000") == true
+      assert Iptools.is_ipv6?("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff") == true
+      assert Iptools.is_ipv6?("1050:0000:0000:0000:0005:0600:300c:326b") == true
+      assert Iptools.is_ipv6?("1050:0000:87a2:2efa:4567:9321:300c:326b") == true
+
+      assert Iptools.is_ipv6?("ffgf:ffff:ffff:ffff:ffff:ffff:ffff:ffff") == false
+      assert Iptools.is_ipv6?("ffgf:ffff:ffff:ffff:ffff:ffff:ffff:ffff") == false
+      assert Iptools.is_ipv6?("") == false
+      assert Iptools.is_ipv6?("example.com") == false
+    end
+
+    test "properly handles omitting leading zeroes" do
+      assert Iptools.is_ipv6?("1050:0:0:000:5:600:300c:326b") == true
+      assert Iptools.is_ipv6?("1050:0000:0000:0000:0005:0600:300c:326b") == true
+    end
+
+    test "properly handles double colon notation" do
+      assert Iptools.is_ipv6?("ff06::c3") == true
+    end
+
+    test "properly handles embedded IPv6 decimal notation" do
+      # an IPv4 address is an IPv6 address
+      assert Iptools.is_ipv6?("8.8.8.8") == true
+      assert Iptools.is_ipv6?("ffff:ffff:ffff:ffff:8.8.8.8") == true
+      assert Iptools.is_ipv6?("0:0:0:0:0:ffff:192.1.56.10") == true
+      assert Iptools.is_ipv6?("0:0:0:0:0:ffff:192.1.56.10") == true
+      assert Iptools.is_ipv6?("::ffff:192.1.56.10") == true
+    end
+  end
 end
