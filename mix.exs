@@ -1,8 +1,8 @@
 defmodule Iptools.Mixfile do
   use Mix.Project
 
-  @source_url "https://github.com/freedomben/iptools"
-  @version "0.0.3"
+  @source_url "https://github.com/blackfist/iptools"
+  @version "0.0.4"
 
   def project do
     [
