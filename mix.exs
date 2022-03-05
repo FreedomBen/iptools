@@ -1,12 +1,12 @@
 defmodule Iptools.Mixfile do
   use Mix.Project
 
-  @source_url "https://github.com/blackfist/iptools"
-  @version "0.0.4"
+  @source_url "https://github.com/freedomben/iptools"
+  @version "0.0.6"
 
   def project do
     [
-      app: :iptools,
+      app: :iptools_fb,
       version: @version,
       elixir: "~> 1.2",
       build_embedded: Mix.env() == :prod,
@@ -38,7 +38,7 @@ defmodule Iptools.Mixfile do
 
   defp docs do
     [
-      main: "Iptools",
+      main: "iptools_fb",
       source_url: @source_url,
       extra_section: [],
       api_reference: false
