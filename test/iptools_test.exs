@@ -18,7 +18,9 @@ defmodule IptoolsTest do
     assert Iptools.is_ipv4?("8.8.256.8") == false
     assert Iptools.is_ipv4?("8.8.8.256") == false
     assert Iptools.is_ipv4?("kevin.com") == false
+    assert Iptools.is_ipv4?(nil) == false
   end
+
   test "identifies RFC1918 ip addresses" do
     assert Iptools.is_rfc1918?("10.10.10.10") == true
     assert Iptools.is_rfc1918?("172.16.10.10") == true
@@ -27,6 +29,7 @@ defmodule IptoolsTest do
     assert Iptools.is_rfc1918?("172.16.0.1") == true
     assert Iptools.is_rfc1918?("172.32.0.1") == false
     assert Iptools.is_rfc1918?("192.30.252.130") == false
+    assert Iptools.is_rfc1918?(nil) == false
   end
 
   test "identifies reserved ip addresses" do
@@ -54,6 +57,7 @@ defmodule IptoolsTest do
     assert Iptools.is_reserved?("203.0.114.1") == false
     assert Iptools.is_reserved?("224.0.0.1") == true
     assert Iptools.is_reserved?("255.255.255.255") == true
+    assert Iptools.is_reserved?(nil) == false
   end
 
   test "converts dotted decimal ips to integers" do
